@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
+import { DeliveryOptions } from "./DeliveryOptions";
 
-export function OrderSummary({ cart, deliveryOptions }) {
+export function OrderSummary({ cart, deliveryOptions, loadCart }) {
   return (
     <div className="order-summary">
       {deliveryOptions.length > 0 &&
@@ -44,38 +45,11 @@ export function OrderSummary({ cart, deliveryOptions }) {
                     </span>
                   </div>
                 </div>
-                <div>
-                  {deliveryOptions.map((deliveryOption) => {
-                    let priceString = " FREE SHIPING";
-                    if (deliveryOption.priceCents > 0) {
-                      priceString = `${(deliveryOption.priceCents / 2).toFixed(
-                        2
-                      )}`;
-                    }
-                    return (
-                      <div key={deliveryOption.id} className="delivery-option">
-                        <input
-                          type="radio"
-                          checked={
-                            deliveryOption.id === cartItem.deliveryOptionId
-                          }
-                          className="delivery-option-input"
-                          name={`delivery-option-${cartItem.product.id}`}
-                        />
-                        <div>
-                          <div className="delivery-option-date">
-                            {dayjs(
-                              deliveryOption.estimatedDeliveryTimeMs
-                            ).format("dddd, MMMM D")}
-                          </div>
-                          <div className="delivery-option-price">
-                            {priceString}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                <DeliveryOptions
+                  cartItem={cartItem}
+                  deliveryOptions={deliveryOptions}
+                  loadCart={loadCart}
+                />
               </div>
             </div>
           );
