@@ -5,7 +5,7 @@ import { useEffect, useState, Fragment } from "react";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
-export function OrdersPage({ cart }) {
+export function OrdersPage({ cart, loadCart }) {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -13,6 +13,7 @@ export function OrdersPage({ cart }) {
       setOrders(response.data);
     });
   }, []);
+
   return (
     <>
       <title>Orders</title>
@@ -46,7 +47,13 @@ export function OrdersPage({ cart }) {
                   {order.products.map((orderProduct) => {
                     const product = orderProduct.product ?? {};
                     const productId = product.id ?? orderProduct.productId;
-
+                    const addToCart = async () => {
+                      await axios.post("/api/cart-items", {
+                        productId: product.id,
+                        quantity: orderProduct.quantity,
+                      });
+                      await loadCart();
+                    };
                     return (
                       <Fragment key={`${order.id}-${productId}`}>
                         <div className="product-image-container">
@@ -68,7 +75,10 @@ export function OrdersPage({ cart }) {
                               className="buy-again-icon"
                               src="images/icons/buy-again.png"
                             />
-                            <span className="buy-again-message">
+                            <span
+                              className="buy-again-message"
+                              onClick={addToCart}
+                            >
                               Add to Cart
                             </span>
                           </button>
