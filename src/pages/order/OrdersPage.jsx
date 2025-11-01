@@ -1,5 +1,5 @@
 import "./OrdersPage.css";
-import { Header } from "../components/Header";
+import { Header } from "../../components/Header";
 import axios from "axios";
 import { useEffect, useState, Fragment } from "react";
 import dayjs from "dayjs";
@@ -11,7 +11,7 @@ export function OrdersPage({ cart }) {
     axios.get("/api/orders?expand=products").then((response) => {
       setOrders(response.data);
     });
-  });
+  }, []);
   return (
     <>
       <title>Orders</title>
@@ -46,7 +46,7 @@ export function OrdersPage({ cart }) {
                     return (
                       <Fragment key={orderProduct.id}>
                         <div className="product-image-container">
-                          <img src={orderProduct.image} />
+                          <img src={orderProduct.product.image} />
                         </div>
                         <div className="product-details">
                           <div className="product-name">
@@ -77,9 +77,6 @@ export function OrdersPage({ cart }) {
                               Track package
                             </button>
                           </a>
-                        </div>
-                        <div className="product-image-container">
-                          <img src="images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg" />
                         </div>
                       </Fragment>
                     );

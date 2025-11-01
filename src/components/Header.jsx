@@ -1,12 +1,10 @@
 import "./Header.css";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
-export function Header({ cart }) {
-  let totalQuantity = 0;
-
-  cart.forEach((cartItem) => {
-    totalQuantity += cartItem.quantity;
-  });
+export function Header({ cart = [] }) {
+  const totalQuantity = Array.isArray(cart)
+    ? cart.reduce((sum, cartItem) => sum + (cartItem?.quantity ?? 0), 0)
+    : 0;
 
   return (
     <>
