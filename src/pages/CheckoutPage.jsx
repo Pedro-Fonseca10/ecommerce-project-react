@@ -14,8 +14,8 @@ export function CheckoutPage({ cart }) {
       .then((response) => {
         setDeliveryOptions(response.data);
       });
-    axios.get("/api/payment-summary").then((responsa) => {
-      setPaymentSummary(responsa.data);
+    axios.get("/api/payment-summary").then((response) => {
+      setPaymentSummary(response.data);
     });
   }, []);
   return (
@@ -104,7 +104,10 @@ export function CheckoutPage({ cart }) {
                             ).toFixed(2)}`;
                           }
                           return (
-                            <div className="delivery-option">
+                            <div
+                              key={deliveryOption.id}
+                              className="delivery-option"
+                            >
                               <input
                                 type="radio"
                                 checked={
@@ -136,7 +139,7 @@ export function CheckoutPage({ cart }) {
 
           <div className="payment-summary">
             <div className="payment-summary-title">Payment Summary</div>
-            {paymentSummary.length > 0 && (
+            {paymentSummary && (
               <>
                 <div className="payment-summary-row">
                   <div>Items ({paymentSummary.totalQuantity}):</div>
@@ -169,7 +172,7 @@ export function CheckoutPage({ cart }) {
                 <div className="payment-summary-row total-row">
                   <div>Order total:</div>
                   <div className="payment-summary-money">
-                    {(paymentSummary.totalCents / 100).toFixed(2)}
+                    {(paymentSummary.totalCostCents / 100).toFixed(2)}
                   </div>
                 </div>
 
