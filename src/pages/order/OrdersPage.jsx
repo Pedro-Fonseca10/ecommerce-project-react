@@ -3,6 +3,7 @@ import { Header } from "../../components/Header";
 import axios from "axios";
 import { useEffect, useState, Fragment } from "react";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 
 export function OrdersPage({ cart }) {
   const [orders, setOrders] = useState([]);
@@ -43,15 +44,16 @@ export function OrdersPage({ cart }) {
 
                 <div className="order-details-grid">
                   {order.products.map((orderProduct) => {
+                    const product = orderProduct.product ?? {};
+                    const productId = product.id ?? orderProduct.productId;
+
                     return (
-                      <Fragment key={orderProduct.id}>
+                      <Fragment key={`${order.id}-${productId}`}>
                         <div className="product-image-container">
-                          <img src={orderProduct.product.image} />
+                          <img src={product.image} alt={product.name} />
                         </div>
                         <div className="product-details">
-                          <div className="product-name">
-                            {orderProduct.name}
-                          </div>
+                          <div className="product-name">{product.name}</div>
                           <div className="product-delivery-date">
                             Arriving on:{" "}
                             {dayjs(orderProduct.estimatedDeliveryTimeMs).format(
@@ -72,11 +74,12 @@ export function OrdersPage({ cart }) {
                           </button>
                         </div>
                         <div className="product-actions">
-                          <a href="/tracking">
-                            <button className="track-package-button button-secondary">
-                              Track package
-                            </button>
-                          </a>
+                          <Link
+                            to={`/tracking/${order.id}/${productId}`}
+                            className="track-package-button button-secondary"
+                          >
+                            Track package
+                          </Link>
                         </div>
                       </Fragment>
                     );
